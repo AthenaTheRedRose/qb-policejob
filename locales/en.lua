@@ -40,8 +40,7 @@ local Translations = {
         put_anklet_on = 'You put on an ankle tracker on %{firstname} %{lastname}',
         vehicle_flagged = 'Vehicle %{plate} has been flagged for %{reason}',
         impound_vehicle_removed = 'Vehicle taken out of impound!',
-        impounded = 'Vehicle impounded',
- },
+    },
     info = {
         mr = 'Mr.',
         mrs = 'Mrs.',
@@ -128,6 +127,7 @@ local Translations = {
         heavy_alcohol = 'Smells very much like alcohol',
         agitated = 'Agitated - Signs of Meth Use',
         serial_not_visible = 'Serial number not visible...',
+        tobacco_smell = 'Smells like tobacco',
     },
     menu = {
         garage_title = 'Police Vehicles',
@@ -180,7 +180,6 @@ local Translations = {
         robbing = 'Robbing Person...',
         place_object = 'Placing object..',
         remove_object = 'Removing object..',
-        impound = 'Impounding Vehicle..',
     },
 }
 

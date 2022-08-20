@@ -151,6 +151,7 @@ function TakeOutVehicle(vehicleInfo)
             end
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+            TriggerEvent("WM-weaponrack", veh, QBCore.Functions.GetPlate(veh)) -- WM Added
             TriggerServerEvent("inventory:server:addTrunkItems", QBCore.Functions.GetPlate(veh), Config.CarItems)
             SetVehicleEngineOn(veh, true, true)
         end, vehicleInfo, coords, true)
@@ -338,7 +339,7 @@ RegisterNetEvent('police:client:ImpoundVehicle', function(fullImpound, price)
         local pos = GetEntityCoords(ped)
         local vehpos = GetEntityCoords(vehicle)
         if #(pos - vehpos) < 5.0 and not IsPedInAnyVehicle(ped) then
-           QBCore.Functions.Progressbar('impound', Lang:t('progressbar.impound'), 5000, false, true, {
+            QBCore.Functions.Progressbar('impound', Lang:t('progressbar.impound'), 5000, false, true, {
                 disableMovement = true,
                 disableCarMovement = true,
                 disableMouse = false,
@@ -588,9 +589,9 @@ CreateThread(function()
     local evidenceZones = {}
     for _, v in pairs(Config.Locations["evidence"]) do
         evidenceZones[#evidenceZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 2, 1, {
+            vector3(vector3(v.x, v.y, v.z)), 1, 5, {
             name="box_zone",
-            debugPoly = false,
+            debugPoly = true,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         })
@@ -599,7 +600,7 @@ CreateThread(function()
     local evidenceCombo = ComboZone:Create(evidenceZones, {name = "evidenceCombo", debugPoly = false})
     evidenceCombo:onPlayerInOut(function(isPointInside)
         if isPointInside then
-            if PlayerJob.name == "police" and onDuty then
+            if onDuty then
                 local currentEvidence = 0
                 local pos = GetEntityCoords(PlayerPedId())
 
@@ -629,9 +630,9 @@ CreateThread(function()
     local stashZones = {}
     for _, v in pairs(Config.Locations["stash"]) do
         stashZones[#stashZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 1.5, 1.5, {
+            vector3(vector3(v.x, v.y, v.z)), 3, 3, {
             name="box_zone",
-            debugPoly = false,
+            debugPoly = true,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         })
@@ -654,7 +655,7 @@ CreateThread(function()
         trashZones[#trashZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 1, 1.75, {
             name="box_zone",
-            debugPoly = false,
+            debugPoly = true,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         })
@@ -679,7 +680,7 @@ CreateThread(function()
         fingerprintZones[#fingerprintZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 2, 1, {
             name="box_zone",
-            debugPoly = false,
+            debugPoly = true,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         })
@@ -702,9 +703,9 @@ CreateThread(function()
     local armouryZones = {}
     for _, v in pairs(Config.Locations["armory"]) do
         armouryZones[#armouryZones+1] = BoxZone:Create(
-            vector3(vector3(v.x, v.y, v.z)), 5, 1, {
+            vector3(vector3(v.x, v.y, v.z)), 4, 3, {
             name="box_zone",
-            debugPoly = false,
+            debugPoly = true,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         })

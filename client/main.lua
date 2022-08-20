@@ -39,12 +39,22 @@ local function CreateDutyBlips(playerId, playerLabel, playerJob, playerLocation)
     end
 end
 
+exports("CanRaid", function()
+    local retval = false
+    local PlayerData = QBCore.Functions.GetPlayerData()
+    if PlayerJob.name == "police" and PlayerData.job.grade.level >= Config.RaidLevel and onDuty then
+        retval = true
+    end
+    return retval
+end)
+
 -- Events
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     local player = QBCore.Functions.GetPlayerData()
     PlayerJob = player.job
     onDuty = player.job.onduty
     isHandcuffed = false
+    TriggerServerEvent("QBCore:Server:SetMetaData", "ishandcuffed", false)
     TriggerServerEvent("police:server:SetHandcuffStatus", false)
     TriggerServerEvent("police:server:UpdateBlips")
     TriggerServerEvent("police:server:UpdateCurrentCops")
@@ -202,8 +212,36 @@ end)
 
 RegisterNetEvent('police:client:SendPoliceEmergencyAlert', function()
     local Player = QBCore.Functions.GetPlayerData()
-    TriggerServerEvent('police:server:policeAlert', Lang:t('info.officer_down', {lastname = Player.charinfo.lastname, callsign = Player.metadata.callsign}))
-    TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.officer_down', {lastname = Player.charinfo.lastname, callsign = Player.metadata.callsign}))
+    if not AlertSend then
+        if (PlayerJob.name == 'police') then
+            exports['ps-dispatch']:OfficerDown()
+        elseif PlayerJob.name == 'ambulance' then
+            exports['ps-dispatch']:EmsDown()
+        end
+        AlertSend = true
+        SetTimeout(math.random(10000, 20000), function()
+            AlertSend = false
+        end)
+    else
+        QBCore.Functions.Notify("Already Send!")
+    end
+end)
+
+RegisterNetEvent('police:client:SendPoliceNonEmergencyAlert', function()
+    local Player = QBCore.Functions.GetPlayerData()
+    if not AlertSend then
+        if (PlayerJob.name == 'police') then
+            exports['ps-dispatch']:OfficerDownNE()
+        elseif PlayerJob.name == 'ambulance' then
+            exports['ps-dispatch']:EmsDownNE()
+        end
+        AlertSend = true
+        SetTimeout(math.random(10000, 20000), function()
+            AlertSend = false
+        end)
+    else
+        QBCore.Functions.Notify("Already Sent!")
+    end
 end)
 
 -- Threads

@@ -21,7 +21,8 @@ local StatusList = {
     ['confused'] = Lang:t('evidence.confused'),
     ['alcohol'] = Lang:t('evidence.alcohol'),
     ["heavyalcohol"] = Lang:t('evidence.heavy_alcohol'),
-    ["agitated"] = Lang:t('evidence.agitated')
+    ["agitated"] = Lang:t('evidence.agitated'),
+    ['tobaccosmell'] = Lang:t('evidence.tobacco_smell'),
 }
 
 local WhitelistedWeapons = {
@@ -237,7 +238,7 @@ CreateThread(function()
         Wait(1)
         if CurrentCasing and CurrentCasing ~= 0 then
             local pos = GetEntityCoords(PlayerPedId())
-            if #(pos -vector3(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z)) < 1.5 then
+            if #(pos -vector3(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z)) < 10 then
                 DrawText3D(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z, Lang:t('info.bullet_casing', {value = Casings[CurrentCasing].type}))
                 if IsControlJustReleased(0, 47) then
                     local s1, s2 = GetStreetNameAtCoord(Casings[CurrentCasing].coords.x, Casings[CurrentCasing].coords.y, Casings[CurrentCasing].coords.z)

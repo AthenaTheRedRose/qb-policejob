@@ -464,7 +464,7 @@ RegisterNetEvent('police:server:SendTrackerLocation', function(coords, requestId
     TriggerClientEvent("qb-phone:client:addPoliceAlert", requestId, alertData)
 end)
 
-QBCore.Commands.Add('911p', Lang:t("commands.police_report"), {{name='message', help= Lang:t("commands.message_sent")}}, false, function(source, args)
+--[[*QBCore.Commands.Add('911p', Lang:t("commands.police_report"), {{name='message', help= Lang:t("commands.message_sent")}}, false, function(source, args)
 	local src = source
     local message
 	if args[1] then message = table.concat(args, " ") else message = Lang:t("commands.civilian_call") end
@@ -478,7 +478,7 @@ QBCore.Commands.Add('911p', Lang:t("commands.police_report"), {{name='message', 
             TriggerClientEvent('police:client:policeAlert', v.PlayerData.source, coords, message)
         end
     end
-end)
+end)]]--
 
 -- Items
 QBCore.Functions.CreateUseableItem("handcuffs", function(source)
@@ -669,7 +669,7 @@ RegisterNetEvent('police:server:KidnapPlayer', function(playerId)
 
     local Player = QBCore.Functions.GetPlayer(source)
     local EscortPlayer = QBCore.Functions.GetPlayer(playerId)
-    if not Player or not EscortPlayer then return end
+    if not Player or EscortPlayer then return end
 
     if EscortPlayer.PlayerData.metadata["ishandcuffed"] or EscortPlayer.PlayerData.metadata["isdead"] or EscortPlayer.PlayerData.metadata["inlaststand"] then
         TriggerClientEvent("police:client:GetKidnappedTarget", EscortPlayer.PlayerData.source, Player.PlayerData.source)

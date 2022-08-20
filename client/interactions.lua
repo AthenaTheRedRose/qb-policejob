@@ -374,11 +374,23 @@ RegisterNetEvent('police:client:GetCuffed', function(playerId, isSoftcuff)
     local ped = PlayerPedId()
     if not isHandcuffed then
         isHandcuffed = true
-        TriggerServerEvent("police:server:SetHandcuffStatus", true)
-        ClearPedTasksImmediately(ped)
-        if GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then
-            SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
-        end
+        RegisterCommand('skillbar', function()
+            local Skillbar = exports['qb-skillbar']:GetSkillbarObject()
+            Skillbar.Start({
+                duration = math.random(4000, 7000), -- how long the skillbar runs for
+                pos = math.random(10, 30), -- how far to the right the static box is
+                width = math.random(5, 8), -- how wide the static box is
+            }, function()
+                TriggerServerEvent("police:server:SetHandcuffStatus", true)
+                ClearPedTasksImmediately(ped)
+                if GetSelectedPedWeapon(ped) ~= `WEAPON_UNARMED` then
+                    SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+                end
+            end, function()
+                QBCore.Functions.Notify("You have been cuffed", 'error')
+            end)
+        end)
+
         if not isSoftcuff then
             cuffType = 16
             GetCuffedAnimation(playerId)
